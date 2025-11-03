@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel Agency - Packages</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Travel Dreams</h1>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="packages.html" class="active">Packages</a></li>
+                    <li><a href="booking.html">Booking</a></li>
+                    <li><a href="gallery.html">Gallery</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="container">
+            <h2>Our Packages</h2>
+            <div id="packages-table-container"></div>
+            
+            <h3>Travel Tips</h3>
+            <ul class="travel-tips">
+                <li>Visit iconic landmarks</li>
+                <li>Local cuisine experience</li>
+                <li>Pack light and enjoy more</li>
+            </ul>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Travel Dreams. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        // Package data array
+        const packages = [
+            { 
+                id: 1, 
+                destination: "Swiss Alps, Switzerland", 
+                durationDays: 7, 
+                basePrice: 200000, 
+                season: "peak" 
+            },
+            { 
+                id: 2, 
+                destination: "Maui, Hawaii", 
+                durationDays: 5, 
+                basePrice: 150000, 
+                season: "peak" 
+            },
+            { 
+                id: 3, 
+                destination: "Sahara Desert, Morocco", 
+                durationDays: 4, 
+                basePrice: 120000, 
+                season: "off-peak" 
+            },
+            { 
+                id: 4, 
+                destination: "Kyoto, Japan", 
+                durationDays: 6, 
+                basePrice: 180000, 
+                season: "shoulder" 
+            },
+            { 
+                id: 5, 
+                destination: "Paris, France", 
+                durationDays: 5, 
+                basePrice: 170000, 
+                season: "peak" 
+            },
+            { 
+                id: 6, 
+                destination: "Bali, Indonesia", 
+                durationDays: 7, 
+                basePrice: 140000, 
+                season: "shoulder" 
+            }
+        ];
+
+        // Function to calculate final price
+        function calculateFinalPrice(package) {
+            let finalPrice = package.basePrice;
+            
+            // Seasonal multiplier
+            switch(package.season) {
+                case "peak":
+                    finalPrice *= 1.2; // 20% increase
+                    break;
+                case "shoulder":
+                    finalPrice *= 1.1; // 10% increase
+                    break;
+                case "off-peak":
+                    // No change
+                    break;
+                default:
+                    // No change
+            }
+            
+            // Weekend surcharge (assuming 15% for packages with weekend days)
+            if (package.durationDays >= 2) {
+                finalPrice *= 1.15;
+            }
+            
+            return Math.round(finalPrice);
+        }
+
+        // Function to render packages table
+        function renderPackagesTable() {
+            const container = document.getElementById('packages-table-container');
+            
+            let tableHTML = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Destination</th>
+                            <th>Duration</th>
+                            <th>Base Price</th>
+                            <th>Season</th>
+                            <th>Final Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+            
+            // Loop through packages and create table rows
+            packages.forEach(pkg => {
+                const finalPrice = calculateFinalPrice(pkg);
+                tableHTML += `
+                    <tr>
+                        <td>${pkg.destination}</td>
+                        <td>${pkg.durationDays} days</td>
+                        <td>Rs ${pkg.basePrice.toLocaleString()}</td>
+                        <td>${pkg.season}</td>
+                        <td>Rs ${finalPrice.toLocaleString()}</td>
+                    </tr>
+                `;
+            });
+            
+            tableHTML += `
+                    </tbody>
+                </table>
+            `;
+            
+            container.innerHTML = tableHTML;
+        }
+
+        // Initialize packages table when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            renderPackagesTable();
+            
+            // Navigation highlight
+            const currentPage = window.location.pathname.split('/').pop() || 'packages.html';
+            const navLinks = document.querySelectorAll('header nav a');
+            
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === currentPage) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
